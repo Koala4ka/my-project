@@ -1,0 +1,26 @@
+### NoDocs ###
+GET     /                       controllers.HomeController.index
+
+
+###
+#tags:
+#- Test
+#summary: Hello
+#operationId: Hello
+#produces:
+#- text/plain
+#parameters:
+#- in: query
+#  name: name
+#responses:
+#  '200':
+#    description: success
+#  '500':
+#    description: Internal server error
+###
+GET     /hello                      controllers.HomeController.hello(name: String ?= "world")
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+      
