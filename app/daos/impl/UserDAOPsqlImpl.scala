@@ -1,7 +1,6 @@
 package daos.impl
 
 import daos.UserDAO
-import daos.generic.Tables
 import models.User
 import monix.eval.Task
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
