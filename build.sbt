@@ -1,9 +1,9 @@
-
 name := "MyProject"
 
 version := "1.0"
 
-lazy val `myproject` = (project in file(".")).enablePlugins(PlayScala, SwaggerPlugin)
+lazy val `myproject` = (project in file(".")).enablePlugins(PlayScala, SwaggerPlugin,FlywayPlugin)
+//enablePlugins(FlywayPlugin)
 
 swaggerDomainNameSpaces := Seq("models")
 
@@ -15,6 +15,14 @@ val slickVersion = "3.3.3"
 resolvers += "Akka Snapshot Repository" at "https://repo.akka.io/snapshots/"
 
 scalaVersion := "2.13.5"
+
+flywayUrl := "jdbc:postgresql://localhost:5432/user1;shutdown=true"
+flywayUser := "user1"
+flywayPassword := "dm"
+flywayLocations += "db/migration"
+//flywayUrl in Test := "jdbc:hsqldb:file:target/flyway_sample;shutdown=true"
+//flywayUser in Test := "SA"
+//flywayPassword in Test := ""
 
 libraryDependencies ++= Seq(guice,
   "io.monix" %% "monix" % "3.3.0",
@@ -45,7 +53,7 @@ lazy val slick = taskKey[Seq[File]]("Generate Tables.scala")
 slick := {
   val dir = (sourceManaged in Compile) value
   val outputDir = dir / "slick"
-  val url = "jdbc:postgresql://localhost:5432/postgres"
+  val url = "jdbc:postgresql://localhost:5432/user1"
   val jdbcDriver = "org.postgresql.Driver"
   val slickDriver = "slick.jdbc.PostgresProfile"
   val user = "user1"
@@ -64,5 +72,7 @@ slick := {
 
   Seq(file)
 }
+
+
 
 
