@@ -2,8 +2,10 @@ name := "MyProject"
 
 version := "1.0"
 
-lazy val `myproject` = (project in file(".")).enablePlugins(PlayScala, SwaggerPlugin,FlywayPlugin)
-//enablePlugins(FlywayPlugin)
+lazy val `myproject` = (project in file(".")).enablePlugins(
+  PlayScala,
+  SwaggerPlugin,
+  FlywayPlugin)
 
 swaggerDomainNameSpaces := Seq("models")
 
@@ -16,13 +18,11 @@ resolvers += "Akka Snapshot Repository" at "https://repo.akka.io/snapshots/"
 
 scalaVersion := "2.13.5"
 
-flywayUrl := "jdbc:postgresql://localhost:5432/user1;shutdown=true"
+flywayUrl := "jdbc:postgresql://localhost:5432/user1"
 flywayUser := "user1"
 flywayPassword := "dm"
-flywayLocations += "db/migration"
-//flywayUrl in Test := "jdbc:hsqldb:file:target/flyway_sample;shutdown=true"
-//flywayUser in Test := "SA"
-//flywayPassword in Test := ""
+flywayLocations += "..conf/db/migration/my-project"
+
 
 libraryDependencies ++= Seq(guice,
   "io.monix" %% "monix" % "3.3.0",
@@ -40,7 +40,7 @@ libraryDependencies ++= Seq(guice,
   "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
 
   "org.flywaydb" % "flyway-core" % "7.7.0",
-  "org.flywaydb" %% "flyway-play" % "7.7.0",
+  // "org.flywaydb" %% "flyway-play" % "7.7.0",
 
   "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
   "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
@@ -57,7 +57,7 @@ slick := {
   val jdbcDriver = "org.postgresql.Driver"
   val slickDriver = "slick.jdbc.PostgresProfile"
   val user = "user1"
-  val password ="dm"
+  val password = "dm"
   val pkg = "demo"
 
   val cp = (dependencyClasspath in Compile) value
@@ -65,7 +65,7 @@ slick := {
 
   runner.value.run("slick.codegen.SourceCodeGenerator",
     cp.files,
-    Array(slickDriver, jdbcDriver, url, outputDir.getPath, pkg,user, password),
+    Array(slickDriver, jdbcDriver, url, outputDir.getPath, pkg, user, password),
     s.log).failed foreach (sys error _.getMessage)
 
   val file = outputDir / pkg / "Tables.scala"
