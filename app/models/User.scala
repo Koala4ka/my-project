@@ -9,7 +9,7 @@ case class User(id: Long,
                 login: String,
                 password: String,
                 email: String,
-                phone: Int,
+                phone: String,
                // image:String
                 createdAt: Instant,
                 updatedAt: Instant
@@ -20,5 +20,5 @@ case class User(id: Long,
 object User {
   implicit val format: OFormat[User] = Json.format[User]
 
-  def tupled: ((Long, String, String, String, Int, Instant, Instant)) => User = (User.apply _).tupled
+  def tupled: ((Long, String, String, String, String, Instant, Instant)) => User = (User.apply _).tupled
 }

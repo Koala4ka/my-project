@@ -8,7 +8,7 @@ case class UserDTO(id: Long,
                    login: String,
                    password: String,
                    email: String,
-                   phone: Int,
+                   phone: String,
                    createdAt: Instant,
                    updatedAt: Instant)
 

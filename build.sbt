@@ -21,7 +21,7 @@ scalaVersion := "2.13.5"
 flywayUrl := "jdbc:postgresql://localhost:5432/user1"
 flywayUser := "user1"
 flywayPassword := "dm"
-flywayLocations += "..conf/db/migration/my-project"
+flywayLocations += "../conf/db/migration/my-project"
 
 
 libraryDependencies ++= Seq(guice,
