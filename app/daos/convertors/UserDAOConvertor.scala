@@ -19,19 +19,18 @@ object UserDAOConvertor {
         updatedAt = usersRow.updatedAt.toInstant
       )
     }
+  }
 
-    implicit class UserModelToRow(user: User) {
+  implicit class UserModelToRow(user: User) {
 
-      def toRow(): UsersRow = {
-        UsersRow(id = user.id,
-          login = user.login,
-          password = user.password,
-          email = user.email,
-          phone = user.email,
-          createdAt = Timestamp.from(user.createdAt),
-          updatedAt = Timestamp.from(user.updatedAt))
-      }
+    def toRow(): UsersRow = {
+      UsersRow(id = user.id,
+        login = user.login,
+        password = user.password,
+        email = user.email,
+        phone = user.email,
+        createdAt = Timestamp.from(user.createdAt),
+        updatedAt = Timestamp.from(user.updatedAt))
     }
   }
 }
-

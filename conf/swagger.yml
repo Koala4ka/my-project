@@ -7,8 +7,10 @@ produces:
   - application/json
   - application/text
 securityDefinitions:
-  Cookie:
+  AuthToken:
     description: "Play cookie-based authentication"
-    type: apiKey,
-    in: header,
-    name: Cookie
+    type: "apiKey"
+    in: "header"
+    name: "x-auth-token"
+
+

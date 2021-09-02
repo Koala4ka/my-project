@@ -40,7 +40,6 @@ libraryDependencies ++= Seq(guice,
   "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
 
   "org.flywaydb" % "flyway-core" % "7.7.0",
-  // "org.flywaydb" %% "flyway-play" % "7.7.0",
 
   "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
   "com.typesafe.akka" %% "akka-stream" % AkkaVersion,

@@ -1,5 +1,6 @@
 package daos
 
+import models.Token
 import monix.eval.Task
 
 trait TokenDAO extends ModelDAO[Token, Long] {

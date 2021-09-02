@@ -13,8 +13,10 @@ case class User(id: Long,
                // image:String
                 createdAt: Instant,
                 updatedAt: Instant
-               ) extends HasId[Long] {
+               ) extends Model [Long,User] {
+
   def toDTO: UserDTO = UserDTO(id,login,password, email,phone, createdAt, updatedAt)
+  override def updateModifiedField(): User = this.copy(updatedAt = Instant.now())
 }
 
 object User {

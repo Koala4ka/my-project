@@ -9,7 +9,7 @@ trait ModelDAO[T, ID] {
 
   def create(model: T): Task[T]
 
-  def update(model: T): Task[Unit]
+  def update(model: T): Task[T]
 
   def delete(Id: ID): Task[Unit]
 }

@@ -13,4 +13,6 @@ class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
     case Some(user) => user.toDTO
     case _ => throw NotFoundException("user", s"id=$userId")
   }
+
+  override def createUser: Unit = ???
 }

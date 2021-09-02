@@ -22,6 +22,8 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
 
   private val usersQuery: Query[Users, UsersRow, Seq] = TableQuery[Users]
 
+  protected def queryReturningUser = usersQuery returning usersQuery
+
   override def getById(userId: Long): Task[Option[User]] =
     db.run(usersQuery.filter(_.id === userId).result.headOption)
       .map(_.map(_.toModel)).wrapEx
@@ -30,28 +32,36 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
     .map(_.map(_.toModel))
     .wrapEx
 
-  override def create(user: User): Task[User] = db.run(usersQuery += user.)
-    .map(_ => user)
-    .wrapEx
-
-  protected def queryReturningId: profile.ReturningInsertActionComposer[UsersRow, Long] =
-    usersQuery returning usersQuery += usersQuery
-
-//  override def save(user: User): Task[User] = db.run {
-//    users returning users += user
-
-  override def update(user: User): Task[Unit] = db.run(
-    usersQuery.filter(_.id === user.id).update(user.).checkRowsAffected
-  ).wrapEx.map(_ => Unit)
+  override def create(user: User): Task[User] =
+    db
+      .run(queryReturningUser += user.toRow)
+      .wrapEx
+      .map(_.toModel)
 
 
+  def update(user: User)
+  : Task[User] = {
+    if (user.id == 0)
+      throw new RuntimeException()
+    val userId = user.id
+    val updateAction = usersQuery.filter(_.id === userId).update(user.updateModifiedField().toRow)
+      .map { rowsUpdated =>
+        user.updateModifiedField()
+        if (rowsUpdated == 1)
+          user.updateModifiedField()
+        else throw new RuntimeException()
+      }
+    db.run(updateAction).wrapEx
+  }
 
-  override def delete(id: Long): Task[Unit] = db.run(
-    usersQuery.filter(_.id === id).delete.checkRowsAffected
-  ).wrapEx.map(_ => Unit)
+//  override def delete(id: Long): Task[Unit] = db.run(
+//    usersQuery.filter(_.id === id).delete
+//  ).wrapEx.map(_ => Unit)
 
   override def getByEmail(email: String): Task[Option[User]] =
-    db.run(usersQuery.filter(_.email === email).result.headOption).wrapEx
+    db.run(usersQuery.filter(_.email === email).result.headOption)
+      .wrapEx
+      .map(_.map(_.toModel))
 
- // protected def queryReturningId: profile.ReturningInsertActionComposer[UsersRow, Long] = query returning query.map(_.id)
+  override def delete(Id: Long): Task[Unit] = ???
 }
