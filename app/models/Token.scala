@@ -9,8 +9,9 @@ import java.time.Instant
 case class Token(id: Long,
                  userId: Long,
                  token: String,
-                 createdAt: Instant) extends HasId[Long] {
+                 createdAt: Instant) extends Model [Long,Token]  {
 
+  override def updateModifiedField(): Token = this.copy(createdAt = Instant.now())
 }
 
 object Token {

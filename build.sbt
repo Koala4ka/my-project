@@ -31,6 +31,7 @@ libraryDependencies ++= Seq(guice,
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.scalamock" %% "scalamock" % "5.1.0" % Test,
   "org.postgresql" % "postgresql" % "42.2.19",
+  "com.auth0" % "java-jwt" % "3.15.0",
 
   "com.typesafe.slick" %% "slick" % slickVersion,
   "com.typesafe.slick" %% "slick-hikaricp" % slickVersion,

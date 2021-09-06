@@ -14,5 +14,6 @@ case class UserDTO(id: Long,
 
 object UserDTO {
   implicit val writes: OWrites[UserDTO] = Json.writes[UserDTO]
+
 }
 

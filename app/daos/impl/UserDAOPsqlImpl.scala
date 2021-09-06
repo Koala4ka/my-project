@@ -44,7 +44,8 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
     if (user.id == 0)
       throw new RuntimeException()
     val userId = user.id
-    val updateAction = usersQuery.filter(_.id === userId).update(user.updateModifiedField().toRow)
+    val updateAction = usersQuery.filter(_.id === userId)
+      .update(user.updateModifiedField().toRow)
       .map { rowsUpdated =>
         user.updateModifiedField()
         if (rowsUpdated == 1)
@@ -54,14 +55,14 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
     db.run(updateAction).wrapEx
   }
 
-//  override def delete(id: Long): Task[Unit] = db.run(
-//    usersQuery.filter(_.id === id).delete
-//  ).wrapEx.map(_ => Unit)
+  override def delete(id: Long): Task[Unit] = db.run(
+    usersQuery.filter(_.id === id).delete
+  ).wrapEx.map(_ => Unit)
 
   override def getByEmail(email: String): Task[Option[User]] =
     db.run(usersQuery.filter(_.email === email).result.headOption)
       .wrapEx
       .map(_.map(_.toModel))
 
-  override def delete(Id: Long): Task[Unit] = ???
+
 }
