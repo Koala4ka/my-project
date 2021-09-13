@@ -12,6 +12,7 @@ object Exceptions {
   case class ForbiddenException(message: String) extends RuntimeException("Forbidden. " + message)
 
   case class NotFoundException(message: String) extends RuntimeException(message)
+
   object NotFoundException {
     def apply(model: String, cond: String): NotFoundException = new NotFoundException(s"$model with $cond not found!")
   }
@@ -29,5 +30,9 @@ object Exceptions {
   case class MailerServiceException(implException: Throwable) extends RuntimeException(implException)
 
   case object StrIsNotUUIDException extends RuntimeException
+
+  case object UserAlreadyExistsException extends RuntimeException
+
+  case class ParamNotPassedException(param: String) extends RuntimeException
 
 }

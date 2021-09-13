@@ -7,7 +7,7 @@ import java.sql.Timestamp
 
 object TokenDAOConvertor {
 
-  implicit class TokenRowToModel(tokenRow: TokenRow) {
+  implicit class TokenRowToModel(tokenRow: AuthTokenRow) {
 
     def toModel(): Token = {
       Token(id = tokenRow.id,
@@ -19,8 +19,8 @@ object TokenDAOConvertor {
 
   implicit class TokenModelToRow(token: Token) {
 
-    def toRow(): TokenRow = {
-      TokenRow(id = token.id,
+    def toRow(): AuthTokenRow = {
+      AuthTokenRow(id = token.id,
         userId = token.userId,
         token = token.token,
         createdAt = Timestamp.from(token.createdAt))

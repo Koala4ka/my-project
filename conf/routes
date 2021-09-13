@@ -19,6 +19,39 @@ GET     /                       controllers.HomeController.index
 ###
 GET     /hello                      controllers.HomeController.hello(name: String ?= "world")
 
+########################################################################################################################
+##################################################### A U T H ##########################################################
+########################################################################################################################
+
+
+###
+#tags:
+#- Auth
+#summary: SignIn
+#operationId: SignIn
+#consumes: application/json
+#produces:
+#- application/json
+#parameters:
+#- in: body
+#  name: Credentials
+#  required: true
+#  schema:
+#    "$ref": "#/definitions/services.helpers.Credentials"
+#responses:
+#  '200':
+#    description: success
+#    schema:
+#      "$ref": "#/definitions/models.dtos.SignInEmailAnswerDTO"
+#  '417':
+#    description: Wrong credentials
+#  '422':
+#    description: WrongJson
+#  '500':
+#    description: Internal server error
+###
+POST    /api/auth/auth/signin                       controllers.AuthController.signIn
+
 ### NoDocs ###
 GET     /docs/swagger-ui/*file       controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
 

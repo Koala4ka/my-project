@@ -1,12 +1,13 @@
 package services
 
-import models.User
+
+import models.dtos.SignInEmailAnswerDTO
 import monix.eval.Task
 import services.helpers.{BCryptHelper, Credentials, TimeHelper, UUIDGenerator}
 
 trait AuthService {
 
-  def signIn(credentials: Credentials)(implicit bcryptH: BCryptHelper): Task[User]
+  def signIn(credentials: Credentials)(implicit bcryptH: BCryptHelper): Task[SignInEmailAnswerDTO]
 
   def signUp(credentials: Credentials)(implicit bcryptH: BCryptHelper,
                                        uuidGenerator: UUIDGenerator,

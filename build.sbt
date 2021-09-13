@@ -1,11 +1,16 @@
 name := "MyProject"
 
 version := "1.0"
+lazy val flywaymod = RootProject(file("flyway-mod"))
 
-lazy val `myproject` = (project in file(".")).enablePlugins(
-  PlayScala,
-  SwaggerPlugin,
-  FlywayPlugin)
+lazy val `myproject` = (project in file("."))
+  .dependsOn(flywaymod)
+  .aggregate(flywaymod)
+  .enablePlugins(
+    PlayScala,
+    SwaggerPlugin,
+    FlywayPlugin
+  )
 
 swaggerDomainNameSpaces := Seq("models")
 
@@ -13,16 +18,10 @@ val AkkaVersion = "2.6.8"
 val AkkaHttpVersion = "10.2.6"
 val slickVersion = "3.3.3"
 
-
+resolvers += "jitpack" at "https://jitpack.io"
 resolvers += "Akka Snapshot Repository" at "https://repo.akka.io/snapshots/"
 
 scalaVersion := "2.13.5"
-
-flywayUrl := "jdbc:postgresql://localhost:5432/user1"
-flywayUser := "user1"
-flywayPassword := "dm"
-flywayLocations += "../conf/db/migration/my-project"
-
 
 libraryDependencies ++= Seq(guice,
   "io.monix" %% "monix" % "3.3.0",
@@ -46,8 +45,22 @@ libraryDependencies ++= Seq(guice,
   "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
   "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
 )
+libraryDependencies += "com.pauldijou" %% "jwt-core" % "5.0.0"
 
 sourceGenerators in Compile += slick.taskValue
+
+flywayClean := {
+  (flywayClean in flywaymod).value
+}
+
+flywayMigrate := {
+  (flywayMigrate in flywaymod).value
+}
+
+flywayInfo := {
+  (flywayInfo in flywaymod).value
+}
+
 
 lazy val slick = taskKey[Seq[File]]("Generate Tables.scala")
 slick := {
@@ -63,7 +76,7 @@ slick := {
   val cp = (dependencyClasspath in Compile) value
   val s = streams value
 
-  runner.value.run("slick.codegen.SourceCodeGenerator",
+  (runner in Compile).value.run("slick.codegen.SourceCodeGenerator",
     cp.files,
     Array(slickDriver, jdbcDriver, url, outputDir.getPath, pkg, user, password),
     s.log).failed foreach (sys error _.getMessage)
@@ -73,6 +86,16 @@ slick := {
   Seq(file)
 }
 
+flywayClean := {
+  (flywayClean in flywaymod).value
+}
 
+flywayMigrate := {
+  (flywayMigrate in flywaymod).value
+}
+
+flywayInfo := {
+  (flywayInfo in flywaymod).value
+}
 
 

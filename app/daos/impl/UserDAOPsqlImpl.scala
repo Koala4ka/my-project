@@ -57,7 +57,7 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
 
   override def delete(id: Long): Task[Unit] = db.run(
     usersQuery.filter(_.id === id).delete
-  ).wrapEx.map(_ => Unit)
+  ).wrapEx.map(_ => ())
 
   override def getByEmail(email: String): Task[Option[User]] =
     db.run(usersQuery.filter(_.email === email).result.headOption)

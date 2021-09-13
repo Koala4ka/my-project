@@ -11,12 +11,12 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class UserController @Inject()(cc: ControllerComponents,
-                               userService: UserService)(implicit ex: ExecutionContext, sch: Scheduler)
-  extends ControllerUtils(cc) {
+                               userService: UserService)(implicit ex: ExecutionContext, sch: Scheduler){
+  //extends ControllerUtils(cc) {
 
-  def getCurrentUser: Action[AnyContent] = authorizedAction { req =>
-    userService.getUser(req.userId)
-      .map(dto => Ok(Json.toJson(dto)))
-  }
+//  def getCurrentUser: Action[AnyContent] = authorizedAction { req =>
+//    userService.getUser(req.userId)
+//      .map(dto => Ok(Json.toJson(dto)))
+ // }
 
 }

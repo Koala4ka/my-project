@@ -1,7 +1,7 @@
 package models
 
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Json, OFormat, Writes}
 
 import java.time.Instant
 

@@ -16,4 +16,3 @@ object UserDTO {
   implicit val writes: OWrites[UserDTO] = Json.writes[UserDTO]
 
 }
-

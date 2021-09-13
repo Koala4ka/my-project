@@ -3,7 +3,6 @@ package daos.impl
 import daos.TokenDAO
 import daos.convertors.TokenDAOConvertor.TokenRowToModel
 import demo.Tables._
-//import models.Token
 import monix.eval.Task
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
@@ -21,7 +20,7 @@ class TokenDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
   import daos.helpers.Helpers._
   import profile.api._
 
-  private val tokenQuery: Query[Token, TokenRow, Seq] = TableQuery[Token]
+  private val tokenQuery: Query[AuthToken, AuthTokenRow, Seq] = TableQuery[AuthToken]
 
   protected def queryReturningToken = tokenQuery returning tokenQuery
 
@@ -59,7 +58,7 @@ class TokenDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
   override def delete(id: Long): Task[Unit] = db.run(
     tokenQuery.filter(_.id === id).delete
-  ).wrapEx.map(_ => Unit)
+  ).wrapEx.map(_ => ())
 
 
   override def getByUserId(userId: Long): Task[Seq[Token]] =
