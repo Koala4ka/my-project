@@ -1,5 +1,5 @@
 import com.google.inject.AbstractModule
-import config.JWTConfig
+import config.{JWTConfig, PlayJWTConfig}
 import daos.{TokenDAO, UserDAO}
 import daos.impl.{TokenDAOPsqlImpl, UserDAOPsqlImpl}
 import monix.execution.Scheduler
@@ -15,9 +15,7 @@ class Module extends AbstractModule {
     bind(classOf[UserService]).to(classOf[UserServiceImpl])
     bind(classOf[JWTService]).asEagerSingleton()
 
-    //bind(classOf[JWTConfig]).asEagerSingleton()
-   // bind(classOf[JWTConfig]).to(classOf[Configuration])
-   // bind(classOf[JWTConfig]).to(classOf[JWTService])
+    bind(classOf[JWTConfig]).to(classOf[PlayJWTConfig])
 
     bind(classOf[TokenDAO]).to(classOf[TokenDAOPsqlImpl])
     bind(classOf[UserDAO]).to(classOf[UserDAOPsqlImpl])

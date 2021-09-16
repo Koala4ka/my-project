@@ -1,4 +1,4 @@
-package services.helpers
+package models.dtos.question
 
 import play.api.data.Form
 import play.api.data.Forms._
@@ -11,12 +11,6 @@ object Credentials {
     password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,64}$")
   }
 
-  implicit val signUpForm: Form[Credentials] = Form (
-    mapping(
-      "email" -> email,
-      "password" -> nonEmptyText.verifying(validPassword _)
-    )(Credentials.apply)(Credentials.unapply)
-  )
 
   implicit val signInForm: Form[Credentials] = Form (
     mapping(

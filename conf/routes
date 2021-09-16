@@ -37,7 +37,7 @@ GET     /hello                      controllers.HomeController.hello(name: Strin
 #  name: Credentials
 #  required: true
 #  schema:
-#    "$ref": "#/definitions/services.helpers.Credentials"
+#    "$ref": "#/definitions/models.dtos.question.Credentials"
 #responses:
 #  '200':
 #    description: success
@@ -51,6 +51,32 @@ GET     /hello                      controllers.HomeController.hello(name: Strin
 #    description: Internal server error
 ###
 POST    /api/auth/auth/signin                       controllers.AuthController.signIn
+
+###
+#tags:
+#- Auth
+#summary: SignUp
+#operationId: SignUp
+#consumes: application/json
+#produces:
+#- text/plain
+#parameters:
+#- in: body
+#  name: Credentials
+#  required: true
+#  schema:
+#    "$ref": "#/definitions/models.dtos.question.SignUpForm"
+#responses:
+#  '200':
+#    description: success
+#  '409':
+#    description: UserAlreadyExists
+#  '422':
+#    description: WrongJson
+#  '500':
+#    description: Internal server error
+###
+POST    /auth/signup                       controllers.AuthController.signUp
 
 ### NoDocs ###
 GET     /docs/swagger-ui/*file       controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
