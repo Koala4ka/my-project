@@ -7,9 +7,9 @@ lazy val `myproject` = (project in file("."))
   .dependsOn(flywaymod)
   .aggregate(flywaymod)
   .enablePlugins(
-    PlayScala,
     SwaggerPlugin,
-    FlywayPlugin
+    FlywayPlugin,
+      PlayScala
   )
 
 swaggerDomainNameSpaces := Seq("models")

@@ -44,8 +44,8 @@ class ControllerUtils(cc: ControllerComponents,
     }
 
 
-  def authorizedAction(block:CustomRequest[Any] => Task[Result]): Action[AnyContent] ={
-    actionWithRecover{
+  def authorizedAction [A](block:CustomRequest[A] => Task[Result])(implicit form: Form[A]): Action[AnyContent] ={
+    actionWithBody [A]{
       req =>
         val token = req.request.headers.get("x-auth-token").getOrElse("")
         val (userId,email) = jwtService.decodeToken(token = token)
@@ -53,7 +53,6 @@ class ControllerUtils(cc: ControllerComponents,
           case true => block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = req.bodyOption))
           case false => throw TokenBrokenOrExpired
         })
-
         }
     }
 

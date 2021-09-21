@@ -5,9 +5,9 @@ import play.api.libs.json.{Json, OWrites}
 import java.time.Instant
 
 case class UserDTO(id: Long,
+                   email: String,
                    login: String,
                    password: String,
-                   email: String,
                    phone: String,
                    createdAt: Instant,
                    updatedAt: Instant)

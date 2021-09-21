@@ -11,9 +11,9 @@ object UserDAOConvertor {
 
     def toModel(): User = {
       User(id = usersRow.id,
+        email = usersRow.email,
         login = usersRow.login,
         password = usersRow.password,
-        email = usersRow.email,
         phone = usersRow.phone,
         createdAt = usersRow.createdAt.toInstant,
         updatedAt = usersRow.updatedAt.toInstant
@@ -25,10 +25,10 @@ object UserDAOConvertor {
 
     def toRow(): UsersRow = {
       UsersRow(id = user.id,
+        email = user.email,
         login = user.login,
         password = user.password,
-        email = user.email,
-        phone = user.email,
+        phone = user.phone,
         createdAt = Timestamp.from(user.createdAt),
         updatedAt = Timestamp.from(user.updatedAt))
     }

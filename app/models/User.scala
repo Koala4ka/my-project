@@ -6,9 +6,9 @@ import play.api.libs.json.{Json, OFormat}
 import java.time.Instant
 
 case class User(id: Long,
+                email: String,
                 login: String,
                 password: String,
-                email: String,
                 phone: String,
                // image:String
                 createdAt: Instant,
@@ -24,3 +24,5 @@ object User {
 
   def tupled: ((Long, String, String, String, String, Instant, Instant)) => User = (User.apply _).tupled
 }
+
+

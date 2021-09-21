@@ -26,7 +26,7 @@ class AuthController @Inject()(cc: ControllerComponents,
         .map(dto => Ok(Json.toJson(dto)))
   }(Credentials.signInForm)
 
-  def signUp: Action[AnyContent] = actionWithBody[SignUpForm] {
+  def signUp: Action[AnyContent] = authorizedAction[SignUpForm] {
     req =>
       authService.signUp(req.parsedBody)
         .map(dto => Ok(Json.toJson(dto)))

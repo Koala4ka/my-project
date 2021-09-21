@@ -46,13 +46,13 @@ class AuthServiceImpl @Inject()(userDAO: UserDAO,
                       timeHelper: TimeHelper): Task[User] = for {
     validateUser <- userDAO.validateUser(signUp.email, signUp.login, signUp.phone)
     createUser <- validateUser match {
-      case true => userDAO.create(User(id = 0, login = signUp.login,
-        password = signUp.password,
-        email = signUp.email,
+      case false => userDAO.create(User(id = 0, email = signUp.email,
+        login = signUp.login,
+        password =  bcryptH.bcrypt(signUp.password),
         phone = signUp.phone,
         createdAt = Instant.now(),
         updatedAt = Instant.now()))
-      case false => throw UserAlreadyExistsException
+      case true => throw UserAlreadyExistsException
     }
   } yield createUser
 }
