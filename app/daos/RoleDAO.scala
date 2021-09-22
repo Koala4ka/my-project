@@ -5,6 +5,6 @@ import monix.eval.Task
 
 trait RoleDAO extends ModelDAO[Role, Long] {
 
-  def getByUserId(userId: Long): Task[Seq[Role]]
+  def getByUserId(userId: Long): Task[Option[Role]]
 
 }
