@@ -23,6 +23,7 @@ class JWTService @Inject()(config: JWTConfig){
   }
 
   def decodeToken(token: String): (Long, String) = {
+    println(token)
     Jwt
       .decode(token, config.secretKey.string, Seq(JwtAlgorithm.HS384))
       .map { decodedClaim =>

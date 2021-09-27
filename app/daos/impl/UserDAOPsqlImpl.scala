@@ -28,9 +28,11 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
     db.run(usersQuery.filter(_.id === userId).result.headOption)
       .map(_.map(_.toModel)).wrapEx
 
-  override def getAll: Task[Seq[User]] = db.run(usersQuery.result)
-    .map(_.map(_.toModel))
-    .wrapEx
+  override def getAll: Task[Seq[User]] =
+    db
+      .run(usersQuery.result)
+      .map(_.map(_.toModel))
+      .wrapEx
 
   override def create(user: User): Task[User] =
     db

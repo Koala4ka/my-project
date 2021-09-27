@@ -1,7 +1,7 @@
 import com.google.inject.AbstractModule
 import config.{JWTConfig, PlayJWTConfig}
-import daos.{TokenDAO, UserDAO}
-import daos.impl.{TokenDAOPsqlImpl, UserDAOPsqlImpl}
+import daos.{PermissionDAO, RoleDAO, TokenDAO, UserDAO}
+import daos.impl.{PermissionDAOImpl, RoleDAOImpl, TokenDAOPsqlImpl, UserDAOPsqlImpl}
 import monix.execution.Scheduler
 import play.api.Configuration
 import services.{AuthService, JWTService, UserService}
@@ -19,6 +19,8 @@ class Module extends AbstractModule {
 
     bind(classOf[TokenDAO]).to(classOf[TokenDAOPsqlImpl])
     bind(classOf[UserDAO]).to(classOf[UserDAOPsqlImpl])
+    bind(classOf[PermissionDAO]).to(classOf[PermissionDAOImpl])
+    bind(classOf[RoleDAO]).to(classOf[RoleDAOImpl])
 
   }
 

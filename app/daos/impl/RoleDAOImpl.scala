@@ -30,9 +30,9 @@ class RoleDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 
   override def getByUserId(userId: Long): Task[Option[Role]] =
     db
-      .run(usersRoleQuery.filter(_.userid === userId)
+      .run(usersRoleQuery.filter(_.userId === userId)
         .join(roleQuery)
-        .on(_.roleid === _.id)
+        .on(_.roleId === _.id)
         .map(_._2)
         .result.headOption)
       .map(_.map(_.toModel))

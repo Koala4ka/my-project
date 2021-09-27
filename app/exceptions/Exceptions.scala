@@ -7,6 +7,9 @@ object Exceptions {
 
   case object WrongCredentials extends RuntimeException
 
+  case object UserRoleDoesNotExist extends RuntimeException
+  case object UserHasNoPermissionError extends RuntimeException
+
   case object UnauthorizedException extends RuntimeException
 
   case class ForbiddenException(message: String) extends RuntimeException("Forbidden. " + message)
