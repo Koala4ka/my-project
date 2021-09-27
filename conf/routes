@@ -27,6 +27,7 @@ GET     /hello                      controllers.HomeController.hello(name: Strin
 ###
 #tags:
 #- Auth
+#
 #summary: SignIn
 #operationId: SignIn
 #consumes: application/json
@@ -43,38 +44,24 @@ GET     /hello                      controllers.HomeController.hello(name: Strin
 #    description: success
 #    schema:
 #      "$ref": "#/definitions/models.dtos.SignInEmailAnswerDTO"
-#  '417':
-#    description: Wrong credentials
-#  '422':
-#    description: WrongJson
-#  '500':
-#    description: Internal server error
 ###
 POST    /api/auth/auth/signin                       controllers.AuthController.signIn
 
+
+
 ###
-#tags:
-#- Auth
-#summary: SignUp
-#operationId: SignUp
-#consumes: application/json
-#produces:
-#- text/plain
-#parameters:
-#- in: body
-#  name: Credentials
-#  required: true
-#  schema:
-#    "$ref": "#/definitions/models.dtos.question.SignUpForm"
-#responses:
-#  '200':
-#    description: success
-#  '409':
-#    description: UserAlreadyExists
-#  '422':
-#    description: WrongJson
-#  '500':
-#    description: Internal server error
+#  summary: Description
+#  tags:
+#    - Auth
+#  security:
+#    - AuthToken: []
+#  parameters:
+#    - name: body
+#      schema:
+#        "$ref": "#/definitions/models.dtos.question.SignUpForm"
+#  responses:
+#    200:
+#      description: success
 ###
 POST    /auth/signup                       controllers.AuthController.signUp
 
@@ -87,4 +74,3 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 
 
-      
