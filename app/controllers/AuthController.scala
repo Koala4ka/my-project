@@ -37,17 +37,18 @@ class AuthController @Inject()(cc: ControllerComponents,
           .map(dto => Ok(Json.toJson(dto)))
     }(SignUpForm.signUpForm)
 
-  def getAll: Action[AnyContent] = authorizedAction {
-    userService.getAll().map {
-      users =>
-        val arrayOfJS = users.map(Json.toJson(_))
-        Ok(Json.toJson(arrayOfJS))
+  def getAll: Action[AnyContent] =
+    authorizedAction[AnyContent](permission = Permission(name = "View")) {
+      userService.getAll().map {
+        users =>
+          val arrayOfJS = users.map(Json.toJson(_))
+          Ok(Json.toJson(arrayOfJS))
+      }
     }
-  }
 
-  def updateUser: Action[AnyContent]=
-    authorizedAction[SignUpForm](permission = Permission(name="User-Edit")){
-      req=>
+  def updateUser: Action[AnyContent] =
+    authorizedAction[SignUpForm](permission = Permission(name = "User-Edit")) {
+      req =>
         userService.update()
     }
 

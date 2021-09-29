@@ -19,6 +19,6 @@ class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
 
   override def getAll(): Task[Seq[User]] = userDAO.getAll
 
-  override def update(user: User): Task[UserDTO] =
-    userDAO.update(user)
+//  override def update(user: User): Task[UserDTO] =
+//    userDAO.update(user)
 }

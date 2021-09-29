@@ -69,6 +69,11 @@ class ControllerUtils(cc: ControllerComponents,
     }
   }
 
+//  def authorizedGetAction(permission: Permission)
+//                         (block:  => Task[Result]): Action[AnyContent] ={
+//
+//  }
+
   def actionWithBody[A](block: CustomRequest[A] => Task[Result])(implicit form: Form[A]): Action[AnyContent] =
   Action.async(req => Task(CustomRequest(req,None,None).bodyAsJson).flatMap(block).runToFuture)
 }
