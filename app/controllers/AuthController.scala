@@ -31,14 +31,14 @@ class AuthController @Inject()(cc: ControllerComponents,
   }(Credentials.signInForm)
 
   def signUp: Action[AnyContent] =
-    authorizedAction[SignUpForm](permission = Permission(name = "User-Add")) {
+    authorizedActionPOST[SignUpForm](permission = Permission(name = "User-Add")) {
       req =>
         authService.signUp(req.parsedBody)
           .map(dto => Ok(Json.toJson(dto)))
     }(SignUpForm.signUpForm)
 
   def getAll: Action[AnyContent] =
-    authorizedAction[AnyContent](permission = Permission(name = "View")) {
+    authorizedActionGET(permission = Permission(name = "View")) { implicit request =>
       userService.getAll().map {
         users =>
           val arrayOfJS = users.map(Json.toJson(_))
@@ -46,11 +46,11 @@ class AuthController @Inject()(cc: ControllerComponents,
       }
     }
 
-  def updateUser: Action[AnyContent] =
-    authorizedAction[SignUpForm](permission = Permission(name = "User-Edit")) {
-      req =>
-        userService.update()
-    }
+//  def updateUser: Action[AnyContent] =
+//    authorizedAction[SignUpForm](permission = Permission(name = "User-Edit")) {
+//      req =>
+//        userService.update()
+//    }
 
 }
 

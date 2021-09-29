@@ -50,8 +50,8 @@ class ControllerUtils(cc: ControllerComponents,
     }
 
 
-  def authorizedAction[A](permission: Permission)
-                         (block: CustomRequest[A] => Task[Result])(implicit form: Form[A]): Action[AnyContent] = {
+  def authorizedActionPOST[A](permission: Permission)
+                             (block: CustomRequest[A] => Task[Result])(implicit form: Form[A]): Action[AnyContent] = {
     actionWithBody[A] {
       req =>
         val token = req.request.headers.get("x-auth-token").getOrElse("")
@@ -69,10 +69,22 @@ class ControllerUtils(cc: ControllerComponents,
     }
   }
 
-//  def authorizedGetAction(permission: Permission)
-//                         (block:  => Task[Result]): Action[AnyContent] ={
-//
-//  }
+  def authorizedActionGET(permission: Permission)
+                         (block: CustomRequest[Option[Nothing]] => Task[Result]): Action[AnyContent] = Action.async {
+      req =>
+        val token = req.headers.get("x-auth-token").getOrElse("")
+        val (userId, email) = jwtService.decodeToken(token = token)
+        tokenDAO.getByUserId(userId).flatMap(_.map(_.token).contains(token) match {
+          case true => checkPermissionCommand
+            .execute(parameters = CheckPermissionParameters(userId = userId, permission = permission))
+            .flatMap({
+              case true => block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = None))
+              case false => throw UserHasNoPermissionError
+            })
+            block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = None))
+          case false => throw TokenBrokenOrExpired
+        }).runToFuture
+  }
 
   def actionWithBody[A](block: CustomRequest[A] => Task[Result])(implicit form: Form[A]): Action[AnyContent] =
   Action.async(req => Task(CustomRequest(req,None,None).bodyAsJson).flatMap(block).runToFuture)
