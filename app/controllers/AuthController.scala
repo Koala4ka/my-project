@@ -1,9 +1,9 @@
 package controllers
 
-import controllers.utils.{ControllerUtils}
-import daos.{TokenDAO}
+import controllers.utils.ControllerUtils
+import daos.TokenDAO
 import models.Permission
-import models.dtos.question.{Credentials, SignUpForm}
+import models.dtos.question.{Credentials, SignUpForm, UserUpdateQuestion}
 import monix.execution.Scheduler
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -46,11 +46,12 @@ class AuthController @Inject()(cc: ControllerComponents,
       }
     }
 
-//  def updateUser: Action[AnyContent] =
-//    authorizedAction[SignUpForm](permission = Permission(name = "User-Edit")) {
-//      req =>
-//        userService.update()
-//    }
+  def updateUser: Action[AnyContent] =
+    authorizedActionPOST[UserUpdateQuestion](permission = Permission(name = "User-Edit")) {
+      req =>
+        userService.update(req.parsedBody)
+          .map(dto => Ok(Json.toJson(dto)))
+    }(UserUpdateQuestion.userUpdateQuestion)
 
 }
 

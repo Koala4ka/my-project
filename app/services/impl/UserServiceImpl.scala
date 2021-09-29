@@ -4,11 +4,12 @@ import daos.UserDAO
 import models.dtos.UserDTO
 import monix.eval.Task
 import services.UserService
-import exceptions.Exceptions.NotFoundException
+import exceptions.Exceptions.{NotFoundException, UserDosNotExist}
 import models.User
-import services.helpers.TimeHelper
-
+import models.dtos.question.UserUpdateQuestion
+import java.time.Instant
 import javax.inject.Inject
+
 
 class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
 
@@ -19,6 +20,18 @@ class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
 
   override def getAll(): Task[Seq[User]] = userDAO.getAll
 
-  override def update(user: User): Task[UserDTO] =
-    userDAO.update(user).map(_.toDTO)
+  override def update(userUpdateQuestion: UserUpdateQuestion): Task[UserDTO] = for{
+   user<- userDAO.getById(userUpdateQuestion.id.toLong).map(_.getOrElse(
+     throw UserDosNotExist
+   ))
+    updateUser <-userDAO.update(User
+    (id = user.id,
+      email = user.email,
+      login = user.login,
+      password = user.password,
+      phone = user.phone,
+      createdAt = user.createdAt,
+      updatedAt = Instant.now))
+  }yield updateUser.toDTO
+
 }

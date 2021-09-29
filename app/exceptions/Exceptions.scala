@@ -8,6 +8,7 @@ object Exceptions {
   case object WrongCredentials extends RuntimeException
 
   case object UserRoleDoesNotExist extends RuntimeException
+
   case object UserHasNoPermissionError extends RuntimeException
 
   case object UnauthorizedException extends RuntimeException
@@ -27,6 +28,8 @@ object Exceptions {
   case object DbResultException extends RuntimeException("No raws was affected")
 
   case object UserAlreadyExist extends RuntimeException
+
+  case object UserDosNotExist extends RuntimeException
 
   case object TokenBrokenOrExpired extends RuntimeException
 
