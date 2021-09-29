@@ -1,15 +1,14 @@
 package controllers
 
-import controllers.utils.{ControllerUtils, CustomRequest}
-import daos.{TokenDAO, UserDAO}
+import controllers.utils.{ControllerUtils}
+import daos.{TokenDAO}
 import models.Permission
 import models.dtos.question.{Credentials, SignUpForm}
 import monix.execution.Scheduler
-import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import services.commands.Impl.CheckPermissionCommand
-import services.{AuthService, JWTService}
+import services.{AuthService, JWTService, UserService}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -18,11 +17,12 @@ import scala.concurrent.ExecutionContext
 class AuthController @Inject()(cc: ControllerComponents,
                                jwtService: JWTService,
                                tokenDAO: TokenDAO,
+                               userService: UserService,
                                authService: AuthService,
-                               checkPermissionCommand:CheckPermissionCommand
+                               checkPermissionCommand: CheckPermissionCommand
                               )(implicit ex: ExecutionContext,
-                                                         sch: Scheduler)
-  extends ControllerUtils(cc, jwtService, tokenDAO,checkPermissionCommand) {
+                                sch: Scheduler)
+  extends ControllerUtils(cc, jwtService, tokenDAO, checkPermissionCommand) {
 
   def signIn: Action[AnyContent] = actionWithBody[Credentials] {
     req =>
@@ -32,8 +32,26 @@ class AuthController @Inject()(cc: ControllerComponents,
 
   def signUp: Action[AnyContent] =
     authorizedAction[SignUpForm](permission = Permission(name = "User-Add")) {
-    req =>
-      authService.signUp(req.parsedBody)
-        .map(dto => Ok(Json.toJson(dto)))
-  }(SignUpForm.signUpForm)
+      req =>
+        authService.signUp(req.parsedBody)
+          .map(dto => Ok(Json.toJson(dto)))
+    }(SignUpForm.signUpForm)
+
+  def getAll: Action[AnyContent] = authorizedAction {
+    userService.getAll().map {
+      users =>
+        val arrayOfJS = users.map(Json.toJson(_))
+        Ok(Json.toJson(arrayOfJS))
+    }
+  }
+
+  def updateUser: Action[AnyContent]=
+    authorizedAction[SignUpForm](permission = Permission(name="User-Edit")){
+      req=>
+        userService.update()
+    }
+
 }
+
+
+

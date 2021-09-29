@@ -23,12 +23,11 @@ class JWTService @Inject()(config: JWTConfig){
   }
 
   def decodeToken(token: String): (Long, String) = {
-    println(token)
     Jwt
       .decode(token, config.secretKey.string, Seq(JwtAlgorithm.HS384))
       .map { decodedClaim =>
         val json = Json.parse(decodedClaim.toJson)
-        val id = (json \ "id").as[Long]
+        val id = (json \ "id").as[String].toLong
         val email = (json \ "email").as[String]
         (id,email)
       }
