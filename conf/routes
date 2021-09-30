@@ -20,6 +20,56 @@ GET     /                       controllers.HomeController.index
 GET     /hello                      controllers.HomeController.hello(name: String ?= "world")
 
 ########################################################################################################################
+##################################################### U S E R ##########################################################
+########################################################################################################################
+
+###
+#  summary: Get all users
+#  tags:
+#    - User
+#  security:
+#    - AuthToken: []
+#  produces:
+#    - application/json
+#  responses:
+#    200:
+#      description: success
+#    401:
+#      description: Unauthorized
+#    500:
+#      description: Internal server error
+###
+GET    /user/all                       controllers.UserController.getAll
+
+###
+#  tags:
+#    - User
+#  summary: Update user
+#  operationId: UpdateUser
+#  consumes: application/json
+#produces:
+#- text/plain
+#parameters:
+#- in: body
+#  name: UserDTO
+#  required: true
+#  schema:
+#    "$ref": "#/definitions/models.dtos.UserDTO"
+#responses:
+#  '200':
+#    description: success
+#  '401':
+#    description: Unauthorized
+#  '404':
+#    description: Not found
+#  '422':
+#    description: Wrong json
+#  '500':
+#    description: Internal server error
+###
+PUT    /user                       controllers.UserController.updateUser
+
+########################################################################################################################
 ##################################################### A U T H ##########################################################
 ########################################################################################################################
 
@@ -46,9 +96,6 @@ GET     /hello                      controllers.HomeController.hello(name: Strin
 #      "$ref": "#/definitions/models.dtos.SignInEmailAnswerDTO"
 ###
 POST    /api/auth/auth/signin                       controllers.AuthController.signIn
-
-
-
 
 ###
 #  summary: Description
