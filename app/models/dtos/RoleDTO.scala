@@ -8,6 +8,7 @@ import java.time.Instant
 case class RoleDTO(id: Long,
                    name: String,
                    description: String,
+                   hasGlobalAccess:Boolean,
                    createdAt: Instant,
                    updatedAt: Instant)
 

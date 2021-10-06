@@ -2,14 +2,13 @@ package controllers.utils
 
 import daos.TokenDAO
 import exceptions.Exceptions._
-import models.Permission
+import models.{Permission, PermissionWrapper}
 import monix.eval.Task
 import monix.execution.Scheduler
 import play.api.data.Form
 import play.api.mvc._
 import services.JWTService
 import services.commands.Impl._
-
 
 import scala.concurrent.ExecutionContext
 
@@ -50,7 +49,8 @@ class ControllerUtils(cc: ControllerComponents,
     }
 
 
-  def authorizedActionPOST[A](permission: Permission)
+  def authorizedActionPOST[A](permissionWrapper: PermissionWrapper,
+                              organizationId: Option[Long])
                              (block: CustomRequest[A] => Task[Result])(implicit form: Form[A]): Action[AnyContent] = {
     actionWithBody[A] {
       req =>
@@ -58,7 +58,9 @@ class ControllerUtils(cc: ControllerComponents,
         val (userId, email) = jwtService.decodeToken(token = token)
         tokenDAO.getByUserId(userId).flatMap(_.map(_.token).contains(token) match {
           case true => checkPermissionCommand
-            .execute(parameters = CheckPermissionParameters(userId = userId, permission = permission))
+            .execute(parameters = CheckPermissionParameters(userId = userId,
+              organization_id = organizationId,
+              permissionWrapper = permissionWrapper))
             .flatMap({
               case true => block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = req.bodyOption))
               case false => throw UserHasNoPermissionError
@@ -69,23 +71,26 @@ class ControllerUtils(cc: ControllerComponents,
     }
   }
 
-  def authorizedActionGET(permission: Permission)
+  def authorizedActionGET(permissionWrapper: PermissionWrapper,
+                          organizationId: Option[Long])
                          (block: CustomRequest[Option[Nothing]] => Task[Result]): Action[AnyContent] = Action.async {
-      req =>
-        val token = req.headers.get("x-auth-token").getOrElse("")
-        val (userId, email) = jwtService.decodeToken(token = token)
-        tokenDAO.getByUserId(userId).flatMap(_.map(_.token).contains(token) match {
-          case true => checkPermissionCommand
-            .execute(parameters = CheckPermissionParameters(userId = userId, permission = permission))
-            .flatMap({
-              case true => block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = None))
-              case false => throw UserHasNoPermissionError
-            })
-            block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = None))
-          case false => throw TokenBrokenOrExpired
-        }).runToFuture
+    req =>
+      val token = req.headers.get("x-auth-token").getOrElse("")
+      val (userId, email) = jwtService.decodeToken(token = token)
+      tokenDAO.getByUserId(userId).flatMap(_.map(_.token).contains(token) match {
+        case true => checkPermissionCommand
+          .execute(parameters = CheckPermissionParameters(userId = userId,
+            organization_id = organizationId,
+            permissionWrapper = permissionWrapper))
+          .flatMap({
+            case true => block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = None))
+            case false => throw UserHasNoPermissionError
+          })
+          block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = None))
+        case false => throw TokenBrokenOrExpired
+      }).runToFuture
   }
 
   def actionWithBody[A](block: CustomRequest[A] => Task[Result])(implicit form: Form[A]): Action[AnyContent] =
-  Action.async(req => Task(CustomRequest(req,None,None).bodyAsJson).flatMap(block).runToFuture)
+    Action.async(req => Task(CustomRequest(req, None, None).bodyAsJson).flatMap(block).runToFuture)
 }

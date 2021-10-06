@@ -47,6 +47,7 @@ class AuthServiceImpl @Inject()(userDAO: UserDAO,
     validateUser <- userDAO.validateUser(signUp.email, signUp.login, signUp.phone)
     createUser <- validateUser match {
       case false => userDAO.create(User(id = 0, email = signUp.email,
+        organization_id=signUp.organization_id.map(_.toLong),
         login = signUp.login,
         password =  bcryptH.bcrypt(signUp.password),
         phone = signUp.phone,

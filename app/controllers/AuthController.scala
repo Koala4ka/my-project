@@ -2,13 +2,13 @@ package controllers
 
 import controllers.utils.ControllerUtils
 import daos.TokenDAO
-import models.Permission
-import models.dtos.question.{Credentials, SignUpForm, UserUpdateQuestion}
+import models.PermissionWrapper
+import models.dtos.question.{Credentials, SignUpForm}
 import monix.execution.Scheduler
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import services.commands.Impl.CheckPermissionCommand
-import services.{AuthService, JWTService, UserService}
+import services.{AuthService, JWTService}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -29,8 +29,9 @@ class AuthController @Inject()(cc: ControllerComponents,
         .map(dto => Ok(Json.toJson(dto)))
   }(Credentials.signInForm)
 
-  def signUp: Action[AnyContent] =
-    authorizedActionPOST[SignUpForm](permission = Permission(name = "User-Add")) {
+  def signUp(organizationId: Option[Long]): Action[AnyContent] =
+    authorizedActionPOST[SignUpForm](permissionWrapper = PermissionWrapper(permissionName = "User-Add",
+      isGlobal = true),organizationId = organizationId) {
       req =>
         authService.signUp(req.parsedBody)
           .map(dto => Ok(Json.toJson(dto)))

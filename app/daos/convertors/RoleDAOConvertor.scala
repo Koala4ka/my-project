@@ -13,6 +13,7 @@ object RoleDAOConvertor {
       Role(id = roleRow.id,
         name = roleRow.name,
         description = roleRow.description,
+        hasGlobalAccess= roleRow.hasGlobalAccess,
         createdAt = roleRow.createdAt.toInstant,
         updatedAt = roleRow.updatedAt.toInstant)
     }
@@ -23,6 +24,7 @@ object RoleDAOConvertor {
           RolesRow(id = role.id,
             name = role.name,
             description = role.description,
+            hasGlobalAccess= role.hasGlobalAccess,
             createdAt = Timestamp.from(role.createdAt),
             updatedAt = Timestamp.from(role.updatedAt))
         }

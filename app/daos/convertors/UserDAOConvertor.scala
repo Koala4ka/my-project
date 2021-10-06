@@ -11,6 +11,7 @@ object UserDAOConvertor {
 
     def toModel(): User = {
       User(id = usersRow.id,
+        organization_id = usersRow.organizationId,
         email = usersRow.email,
         login = usersRow.login,
         password = usersRow.password,
@@ -25,6 +26,7 @@ object UserDAOConvertor {
 
     def toRow(): UsersRow = {
       UsersRow(id = user.id,
+        organizationId = user.organization_id,
         email = user.email,
         login = user.login,
         password = user.password,

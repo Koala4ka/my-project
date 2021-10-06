@@ -64,7 +64,7 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
   override def getByEmail(email: String): Task[Option[User]] =
     db.run(usersQuery.filter(_.email === email).result.headOption)
       .wrapEx
-      .map(_.map(_.toModel))
+      .map(_.map(_.toModel()))
 
   override def validateUser(email: String, login: String, phone: String): Task[Boolean] =
     db.run(usersQuery.filter(user => user.login === login &&

@@ -39,35 +39,37 @@ GET     /hello                      controllers.HomeController.hello(name: Strin
 #    500:
 #      description: Internal server error
 ###
-GET    /user/all                       controllers.UserController.getAll
+GET    /user/all                  controllers.UserController.getAll(organizationId:Option[Long])
+
 
 ###
+#  summary: Update user
 #  tags:
 #    - User
-#  summary: Update user
-#  operationId: UpdateUser
+#  security:
+#    - AuthToken: []
 #  consumes: application/json
-#produces:
-#- text/plain
-#parameters:
-#- in: body
-#  name: UserDTO
-#  required: true
-#  schema:
-#    "$ref": "#/definitions/models.dtos.UserDTO"
-#responses:
-#  '200':
-#    description: success
-#  '401':
-#    description: Unauthorized
-#  '404':
-#    description: Not found
-#  '422':
-#    description: Wrong json
-#  '500':
-#    description: Internal server error
+#  produces:
+#    - text/plain
+#  parameters:
+#    - in: body
+#      name: UserDTO
+#      required: true
+#      schema:
+#        "$ref": "#/definitions/models.dtos.question.UserUpdateQuestion"
+#  responses:
+#    200:
+#      description: success
+#    401:
+#      description: Unauthorized
+#    404:
+#      description: Not found
+#    422:
+#      description: Wrong json
+#    500:
+#      description: Internal server error
 ###
-PUT    /user                       controllers.UserController.updateUser
+PUT    /user                    controllers.UserController.updateUser(organizationId:Option[Long])
 
 ########################################################################################################################
 ##################################################### A U T H ##########################################################
@@ -75,25 +77,24 @@ PUT    /user                       controllers.UserController.updateUser
 
 
 ###
-#tags:
-#- Auth
-#
-#summary: SignIn
-#operationId: SignIn
-#consumes: application/json
-#produces:
-#- application/json
-#parameters:
-#- in: body
-#  name: Credentials
-#  required: true
-#  schema:
-#    "$ref": "#/definitions/models.dtos.question.Credentials"
-#responses:
-#  '200':
-#    description: success
-#    schema:
-#      "$ref": "#/definitions/models.dtos.SignInEmailAnswerDTO"
+#  tags:
+#    - Auth
+#  summary: SignIn
+#  operationId: SignIn
+#  consumes: application/json
+#  produces:
+#    - application/json
+#  parameters:
+#    - in: body
+#      name: Credentials
+#      required: true
+#      schema:
+#        "$ref": "#/definitions/models.dtos.question.Credentials"
+#  responses:
+#    '200':
+#      description: success
+#      schema:
+#        "$ref": "#/definitions/models.dtos.SignInEmailAnswerDTO"
 ###
 POST    /api/auth/auth/signin                       controllers.AuthController.signIn
 
@@ -111,7 +112,7 @@ POST    /api/auth/auth/signin                       controllers.AuthController.s
 #    200:
 #      description: success
 ###
-POST    /auth/signup                       controllers.AuthController.signUp
+POST    /auth/signup                  controllers.AuthController.signUp(organizationId:Option[Long])
 
 ### NoDocs ###
 GET     /docs/swagger-ui/*file       controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)

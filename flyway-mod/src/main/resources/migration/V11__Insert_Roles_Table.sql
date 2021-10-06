@@ -1,9 +1,11 @@
-INSERT INTO roles (name, description)
+INSERT INTO roles (name, description, has_global_access)
 VALUES ('MASTER',
-        'Creating Users,Manage everything');
-INSERT INTO roles (name, description)
+        'Creating Users,Manage everything',
+            TRUE);
+INSERT INTO roles (name, description,has_global_access)
 VALUES ('MANAGER',
-        'Manage everything but cant create users');
+        'Manage everything but cant create users',
+        FALSE);
 INSERT INTO role_user (user_id, role_id)
 VALUES ((SELECT id
          FROM users
