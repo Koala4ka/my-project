@@ -29,7 +29,7 @@ class PermissionDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfig
   override def getByRoleId(roleId: Long): Task[Seq[Permission]] = db
     .run(permissionRoleQuery.filter(_.roleId === roleId)
       .join(permissionQuery)
-      .on(_.roleId === _.id)
+      .on(_.permissionId === _.id)
       .map(_._2)
       .result)
     .map(_.map(_.toModel))

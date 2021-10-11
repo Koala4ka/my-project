@@ -20,7 +20,10 @@ class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
     case _ => throw NotFoundException("user", s"id=$userId")
   }
 
-  override def getAll(): Task[Seq[User]] = userDAO.getAll
+  override def getAll(orgId:Option[Long]): Task[Seq[User]] = orgId match {
+    case Some(organizationId) => organizationId
+  }
+    userDAO.getAll
 
   override def update(userUpdateQuestion: UserUpdateQuestion)
                      (implicit bcryptH: BCryptHelper): Task[UserDTO] = for{

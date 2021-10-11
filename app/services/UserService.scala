@@ -10,7 +10,7 @@ trait UserService {
 
   def update(userUpdateQuestion: UserUpdateQuestion)(implicit bcryptH: BCryptHelper): Task[UserDTO]
 
-  def getAll(): Task[Seq[User]]
+  def getAll(orgId:Option[Long]): Task[Seq[User]]
 
   def getUser(userId: Long): Task[UserDTO]
 }

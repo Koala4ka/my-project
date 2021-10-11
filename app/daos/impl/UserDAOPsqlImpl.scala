@@ -26,19 +26,19 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
 
   override def getById(userId: Long): Task[Option[User]] =
     db.run(usersQuery.filter(_.id === userId).result.headOption)
-      .map(_.map(_.toModel)).wrapEx
+      .map(_.map(_.toModel())).wrapEx
 
   override def getAll: Task[Seq[User]] =
     db
       .run(usersQuery.result)
-      .map(_.map(_.toModel))
+      .map(_.map(_.toModel()))
       .wrapEx
 
   override def create(user: User): Task[User] =
     db
-      .run(queryReturningUser += user.toRow)
+      .run(queryReturningUser += user.toRow())
       .wrapEx
-      .map(_.toModel)
+      .map(_.toModel())
 
 
   def update(user: User)
@@ -47,7 +47,7 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
       throw new RuntimeException()
     val userId = user.id
     val updateAction = usersQuery.filter(_.id === userId)
-      .update(user.updateModifiedField().toRow)
+      .update(user.updateModifiedField().toRow())
       .map { rowsUpdated =>
         user.updateModifiedField()
         if (rowsUpdated == 1)
@@ -74,5 +74,11 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
       .headOption)
       .wrapEx
       .map(_.isDefined)
+
+  override def getByOrgId(orgId: Long): Task[Seq[User]] =
+    db.
+      run(usersQuery.filter(user => user.organizationId === Some(orgId))
+        .result)
+
 
 }

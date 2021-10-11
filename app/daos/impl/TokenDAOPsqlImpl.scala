@@ -46,7 +46,7 @@ class TokenDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
     if (token.id == 0)
       throw new RuntimeException()
     val tokenId = token.id
-    val updateAction = tokenQuery.filter(_.id === tokenId).update(token.updateModifiedField().toRow)
+    val updateAction = tokenQuery.filter(_.id === tokenId).update(token.updateModifiedField().toRow())
       .map { rowsUpdated =>
         token.updateModifiedField()
         if (rowsUpdated == 1)

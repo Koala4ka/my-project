@@ -15,7 +15,7 @@ class CheckPermissionCommand @Inject()(permissionDAO: PermissionDAO,
 
   override type RT = Boolean
 
-  override def execute(parameters: CheckPermissionParameters): Task[Boolean] =
+  override def execute(parameters: CheckPermissionParameters): Task[Boolean] = {
     for {
       role <- roleDAO.getByUserId(userId = parameters.userId)
         .map(_.getOrElse(throw UserRoleDoesNotExist))
@@ -25,14 +25,23 @@ class CheckPermissionCommand @Inject()(permissionDAO: PermissionDAO,
       user <- userDAO.getById(id = parameters.userId)
       userOrgId = user.flatMap(_.organization_id)
     } yield {
+      val hasPermission =  permissions.map(_.name).contains(permissionName)
+      println(s"orgUserId = $userOrgId")
+      println(s"param.organId =${parameters.organization_id}")
+      println(s"Permission = $hasPermission")
+      println("permissions")
+      permissions.map(_.name).foreach(println)
       (parameters.organization_id, parameters.permissionWrapper.isGlobal) match {
-        case (Some(_), _) if role.hasGlobalAccess =>
-          permissions.map(_.name).contains(permissionName)
-        case (Some(organizationId), false) if userOrgId.contains(organizationId) =>
-          permissions.map(_.name).contains(permissionName)
-        case _ =>  permissions.map(_.name).contains(permissionName)
+        case (Some(_), _) if role.hasGlobalAccess => hasPermission
+        case (Some(organizationId),false) if userOrgId.contains(organizationId)=>
+        hasPermission
+        case (Some(_), false) =>
+          if (role.hasGlobalAccess) hasPermission
+          else false
+        case _=> false
       }
     }
+  }
 }
 
 case class CheckPermissionParameters(userId: Long, organization_id: Option[Long], permissionWrapper: PermissionWrapper)
