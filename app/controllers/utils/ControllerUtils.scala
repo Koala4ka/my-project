@@ -2,7 +2,7 @@ package controllers.utils
 
 import daos.TokenDAO
 import exceptions.Exceptions._
-import models.{Permission, PermissionWrapper}
+import models.PermissionWrapper
 import monix.eval.Task
 import monix.execution.Scheduler
 import play.api.data.Form
@@ -65,7 +65,6 @@ class ControllerUtils(cc: ControllerComponents,
               case true => block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = req.bodyOption))
               case false => throw UserHasNoPermissionError
             })
-            block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = req.bodyOption))
           case false => throw TokenBrokenOrExpired
         })
     }
@@ -86,7 +85,6 @@ class ControllerUtils(cc: ControllerComponents,
             case true => block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = None))
             case false => throw UserHasNoPermissionError
           })
-          block(CustomRequest(request = req, userIdOption = Option(userId), bodyOption = None))
         case false => throw TokenBrokenOrExpired
       }).runToFuture
   }

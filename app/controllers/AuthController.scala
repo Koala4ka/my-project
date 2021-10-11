@@ -31,7 +31,7 @@ class AuthController @Inject()(cc: ControllerComponents,
 
   def signUp(organizationId: Option[Long]): Action[AnyContent] =
     authorizedActionPOST[SignUpForm](permissionWrapper = PermissionWrapper(permissionName = "User-Add",
-      isGlobal = true),organizationId = organizationId) {
+      isGlobal = false),organizationId = organizationId) {
       req =>
         authService.signUp(req.parsedBody)
           .map(dto => Ok(Json.toJson(dto)))

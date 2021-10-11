@@ -17,4 +17,8 @@ trait JWTConfig {
       val string = configuration.get[String]("jwt.secret")
       JWTSecretKey(string)
     }
+
+
+
+
   }

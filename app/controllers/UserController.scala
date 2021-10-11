@@ -2,7 +2,7 @@ package controllers
 
 import controllers.utils.ControllerUtils
 import daos.TokenDAO
-import models.{Permission, PermissionWrapper}
+import models.PermissionWrapper
 import models.dtos.question.UserUpdateQuestion
 import monix.execution.Scheduler
 import play.api.libs.json.Json
@@ -26,7 +26,7 @@ class UserController @Inject()(cc: ControllerComponents,
 
   def getAll(organizationId: Option[Long]): Action[AnyContent] =
     authorizedActionGET(permissionWrapper = PermissionWrapper(permissionName = "View",
-      isGlobal = true),organizationId=organizationId) { implicit request =>
+      isGlobal = false), organizationId = organizationId) { implicit request =>
       userService.getAll().map {
         users =>
           val arrayOfJS = users.map(Json.toJson(_))
@@ -37,7 +37,7 @@ class UserController @Inject()(cc: ControllerComponents,
 
   def updateUser(organizationId: Option[Long]): Action[AnyContent] =
     authorizedActionPOST[UserUpdateQuestion](permissionWrapper = PermissionWrapper(permissionName = "User-Edit",
-      isGlobal = true),organizationId = organizationId) {
+      isGlobal = false), organizationId = organizationId) {
       req =>
         userService.update(req.parsedBody)
           .map(dto => Ok(Json.toJson(dto)))
