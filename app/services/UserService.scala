@@ -1,7 +1,7 @@
 package services
 
 import models.User
-import models.dtos.UserDTO
+import models.dtos.answers.UserDTO
 import models.dtos.question.UserUpdateQuestion
 import monix.eval.Task
 import services.helpers.BCryptHelper

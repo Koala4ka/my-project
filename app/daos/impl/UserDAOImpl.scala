@@ -12,8 +12,8 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 
-class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-                               (implicit ex: ExecutionContext) extends UserDAO
+class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+                           (implicit ex: ExecutionContext) extends UserDAO
 
   with HasDatabaseConfigProvider[JdbcProfile] {
 
@@ -77,8 +77,9 @@ class UserDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPr
 
   override def getByOrgId(orgId: Long): Task[Seq[User]] =
     db.
-      run(usersQuery.filter(user => user.organizationId === Some(orgId))
+      run(usersQuery.filter(user => user.organizationId === orgId)
         .result)
-
+      .wrapEx
+      .map(_.map(_.toModel()))
 
 }

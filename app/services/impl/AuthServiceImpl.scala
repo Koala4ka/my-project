@@ -3,8 +3,8 @@ package services.impl
 import daos.{TokenDAO, UserDAO}
 import exceptions.Exceptions.{UserAlreadyExistsException, WrongCredentials}
 import models.User
+import models.dtos.answers.SignInEmailAnswerDTO
 import models.dtos.question.{Credentials, SignUpForm}
-import models.dtos.{SignInEmailAnswerDTO, UserDTO}
 import monix.eval.Task
 import services.AuthService
 import services.helpers.{BCryptHelper, TimeHelper, UUIDGenerator}

@@ -1,4 +1,4 @@
-package models.dtos
+package models.dtos.answers
 
 import models.Token
 import play.api.libs.json.{Json, OWrites}

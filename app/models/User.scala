@@ -1,6 +1,6 @@
 package models
 
-import models.dtos.UserDTO
+import models.dtos.answers.UserDTO
 import play.api.libs.json.{Json, OFormat}
 
 import java.time.Instant

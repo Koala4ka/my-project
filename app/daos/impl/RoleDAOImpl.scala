@@ -39,67 +39,44 @@ class RoleDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       .wrapEx
 
 
-  override def getAll: Task[Seq[Role]] = ???
+  override def getAll: Task[Seq[Role]] =
+    db
+      .run(roleQuery.result)
+      .map(_.map(_.toModel()))
+      .wrapEx
 
-  override def getById(id: Long): Task[Option[Role]] = ???
+  override def getById(roleId: Long): Task[Option[Role]] =
+    db
+      .run(
+        roleQuery.filter(_.id === roleId).result.headOption
+      ).map(_.map(_.toModel())).wrapEx
 
-  override def create(model: Role): Task[Role] = ???
+  override def create(role: Role): Task[Role] =
+    db
+      .run(queryReturningRole += role.toRow())
+      .wrapEx
+      .map(_.toModel())
 
-  override def update(model: Role): Task[Role] = ???
+    def update(role: Role): Task[Role] = {
+      if (role.id == 0)
+        throw new RuntimeException()
+      val roleId = role.id
+      val updateAction = roleQuery.filter(_.id === roleId)
+        .update(role.updateModifiedField().toRow)
+        .map { rowsUpdated =>
+          role.updateModifiedField()
+          if (rowsUpdated == 1)
+            role.updateModifiedField()
+          else throw new RuntimeException()
+        }
+      db.run(updateAction).wrapEx
+    }
 
-  override def delete(Id: Long): Task[Unit] = ???
+  override def delete(id: Long): Task[Unit] =
+    db
+      .run(
+        roleQuery.filter(_.id === id).delete
+      ).wrapEx.map(_ => ())
 }
 
 
-
-
-//  override def getById(userId: Long): Task[Option[User]] =
-//    db.run(usersQuery.filter(_.id === userId).result.headOption)
-//      .map(_.map(_.toModel)).wrapEx
-//
-//  override def getAll: Task[Seq[User]] = db.run(usersQuery.result)
-//    .map(_.map(_.toModel))
-//    .wrapEx
-//
-//  override def create(user: User): Task[User] =
-//    db
-//      .run(queryReturningUser += user.toRow)
-//      .wrapEx
-//      .map(_.toModel)
-//
-//
-//  def update(user: User)
-//  : Task[User] = {
-//    if (user.id == 0)
-//      throw new RuntimeException()
-//    val userId = user.id
-//    val updateAction = usersQuery.filter(_.id === userId)
-//      .update(user.updateModifiedField().toRow)
-//      .map { rowsUpdated =>
-//        user.updateModifiedField()
-//        if (rowsUpdated == 1)
-//          user.updateModifiedField()
-//        else throw new RuntimeException()
-//      }
-//    db.run(updateAction).wrapEx
-//  }
-//
-//  override def delete(id: Long): Task[Unit] = db.run(
-//    usersQuery.filter(_.id === id).delete
-//  ).wrapEx.map(_ => ())
-//
-//  override def getByEmail(email: String): Task[Option[User]] =
-//    db.run(usersQuery.filter(_.email === email).result.headOption)
-//      .wrapEx
-//      .map(_.map(_.toModel))
-//
-//  override def validateUser(email: String, login: String, phone: String): Task[Boolean] =
-//    db.run(usersQuery.filter(user => user.login === login &&
-//      user.email === email &&
-//      user.phone === phone)
-//      .result
-//      .headOption)
-//      .wrapEx
-//      .map(_.isDefined)
-//
-//}

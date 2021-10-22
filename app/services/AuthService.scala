@@ -2,7 +2,7 @@ package services
 
 
 import models.User
-import models.dtos.SignInEmailAnswerDTO
+import models.dtos.answers.SignInEmailAnswerDTO
 import models.dtos.question.{Credentials, SignUpForm}
 import monix.eval.Task
 import services.helpers.{BCryptHelper, TimeHelper, UUIDGenerator}

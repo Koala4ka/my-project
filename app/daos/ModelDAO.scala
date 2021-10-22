@@ -11,5 +11,5 @@ trait ModelDAO[T, ID] {
 
   def update(model: T): Task[T]
 
-  def delete(Id: ID): Task[Unit]
+  def delete(id: ID): Task[Unit]
 }

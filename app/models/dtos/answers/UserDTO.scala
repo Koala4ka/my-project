@@ -1,4 +1,4 @@
-package models.dtos
+package models.dtos.answers
 
 import play.api.libs.json.{Json, OWrites}
 
@@ -14,6 +14,7 @@ case class UserDTO(id: Long,
                    updatedAt: Instant)
 
 object UserDTO {
+
   implicit val writes: OWrites[UserDTO] = Json.writes[UserDTO]
 
 }

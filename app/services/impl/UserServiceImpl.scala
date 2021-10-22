@@ -1,11 +1,11 @@
 package services.impl
 
 import daos.UserDAO
-import models.dtos.UserDTO
 import monix.eval.Task
 import services.UserService
 import exceptions.Exceptions.{NotFoundException, UserDosNotExist}
 import models.User
+import models.dtos.answers.UserDTO
 import models.dtos.question.UserUpdateQuestion
 import services.helpers.BCryptHelper
 
@@ -21,9 +21,9 @@ class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
   }
 
   override def getAll(orgId:Option[Long]): Task[Seq[User]] = orgId match {
-    case Some(organizationId) => organizationId
+    case Some(organizationId) => userDAO.getByOrgId(organizationId)
+    case None => userDAO.getAll
   }
-    userDAO.getAll
 
   override def update(userUpdateQuestion: UserUpdateQuestion)
                      (implicit bcryptH: BCryptHelper): Task[UserDTO] = for{

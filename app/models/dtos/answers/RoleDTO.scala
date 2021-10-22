@@ -1,17 +1,18 @@
-package models.dtos
+package models.dtos.answers
 
 import play.api.libs.json.{Json, OWrites}
 
 import java.time.Instant
 
 
-case class PermissionDTO(id: Long,
+case class RoleDTO(id: Long,
                    name: String,
                    description: String,
+                   hasGlobalAccess:Boolean,
                    createdAt: Instant,
                    updatedAt: Instant)
 
-object PermissionDTO {
-  implicit val writes: OWrites[PermissionDTO] = Json.writes[PermissionDTO]
+object RoleDTO {
+  implicit val writes: OWrites[RoleDTO] = Json.writes[RoleDTO]
 
 }

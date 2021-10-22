@@ -20,6 +20,39 @@ GET     /                       controllers.HomeController.index
 GET     /hello                      controllers.HomeController.hello(name: String ?= "world")
 
 ########################################################################################################################
+##################################################### E M P L O Y E E R ##########################################################
+########################################################################################################################
+
+###
+#  summary: Create Goal
+#  tags:
+#    - Employeer
+#  security:
+#    - AuthToken: []
+#  consumes: application/json
+#  produces:
+#    - text/plain
+#  parameters:
+#    - in: body
+#      name: createGoal
+#      required: true
+#      schema:
+#        "$ref": "#/definitions/models.dtos.question.CreateGoalForm"
+#  responses:
+#    200:
+#      description: success
+#    401:
+#      description: Unauthorized
+#    404:
+#      description: Not found
+#    422:
+#      description: Wrong json
+#    500:
+#      description: Internal server error
+###
+PUT    /goal                    controllers.EmployeeController.createGoal(organizationId:Option[Long])
+
+########################################################################################################################
 ##################################################### U S E R ##########################################################
 ########################################################################################################################
 
@@ -94,7 +127,7 @@ PUT    /user                    controllers.UserController.updateUser(organizati
 #    '200':
 #      description: success
 #      schema:
-#        "$ref": "#/definitions/models.dtos.SignInEmailAnswerDTO"
+#        "$ref": "#/definitions/models.dtos.answers.SignInEmailAnswerDTO"
 ###
 POST    /api/auth/auth/signin                       controllers.AuthController.signIn
 

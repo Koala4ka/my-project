@@ -12,8 +12,8 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 
-class TokenDAOPsqlImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-                                (implicit ex: ExecutionContext) extends TokenDAO
+class TokenDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+                            (implicit ex: ExecutionContext) extends TokenDAO
 
   with HasDatabaseConfigProvider[JdbcProfile] {
 

@@ -27,7 +27,7 @@ class UserController @Inject()(cc: ControllerComponents,
   def getAll(organizationId: Option[Long]): Action[AnyContent] =
     authorizedActionGET(permissionWrapper = PermissionWrapper(permissionName = "View",
       isGlobal = false), organizationId = organizationId) { implicit request =>
-      userService.getAll().map {
+      userService.getAll(orgId = organizationId).map {
         users =>
           val arrayOfJS = users.map(Json.toJson(_))
           Ok(Json.toJson(arrayOfJS))
