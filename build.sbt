@@ -68,7 +68,7 @@ slick := {
   val outputDir = dir / "slick"
   val url = "jdbc:postgresql://localhost:5432/user1"
   val jdbcDriver = "org.postgresql.Driver"
-  val slickDriver = "slick.jdbc.PostgresProfile"
+  val slickDriver = "codegen.MyPostgresProfile"
   val user = "user1"
   val password = "dm"
   val pkg = "demo"
@@ -76,7 +76,7 @@ slick := {
   val cp = (dependencyClasspath in Compile) value
   val s = streams value
 
-  (runner in Compile).value.run("slick.codegen.SourceCodeGenerator",
+  (runner in Compile).value.run("codegen.CustomCodegen",
     cp.files,
     Array(slickDriver, jdbcDriver, url, outputDir.getPath, pkg, user, password),
     s.log).failed foreach (sys error _.getMessage)
